@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1506967644 source:/home/michael/Desktop/SFMLProjects/Tetris/src/GameState.cpp
+	"GameState.h"
+
+1506967621 /home/michael/Desktop/SFMLProjects/Tetris/include/GameState.h
+	<SFML/Graphics.hpp>
+	"Shape.h"
+
+1506969642 source:/home/michael/Desktop/SFMLProjects/Tetris/src/RunningGameState.cpp
+	"RunningGameState.h"
+
+1506970246 /home/michael/Desktop/SFMLProjects/Tetris/include/RunningGameState.h
+	"GameState.h"
+
+1506951541 source:/home/michael/Desktop/SFMLProjects/Tetris/main.cpp
+	<SFML/Graphics.hpp>
+	<RunningGameState.h>
+
+1506968746 /home/michael/Desktop/SFMLProjects/Tetris/include/Shape.h
+	<SFML/Graphics.hpp>
+
+1506970120 source:/home/michael/Desktop/SFMLProjects/Tetris/src/Shape.cpp
+	<cmath>
+	"Shape.h"
+	"GameState.h"
+

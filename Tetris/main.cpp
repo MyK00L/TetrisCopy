@@ -10,6 +10,7 @@ int main()
     window.setFramerateLimit(30);
 
     GameState* game = new RunningGameState(window);
+    sf::Color backgroundColor = sf::Color(32,32,64);
 
     while (window.isOpen())
     {
@@ -22,7 +23,7 @@ int main()
 
         game->update();
 
-        window.clear();
+        window.clear(backgroundColor);
         game->draw();
         window.display();
     }

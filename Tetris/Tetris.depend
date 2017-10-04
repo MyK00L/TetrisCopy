@@ -1,26 +1,33 @@
 # depslib dependency file v1.0
-1506967644 source:/home/michael/Desktop/SFMLProjects/Tetris/src/GameState.cpp
+1507123154 source:/home/michael/Desktop/SFMLProjects/Tetris/src/GameState.cpp
 	"GameState.h"
 
-1506967621 /home/michael/Desktop/SFMLProjects/Tetris/include/GameState.h
+1507123154 /home/michael/Desktop/SFMLProjects/Tetris/include/GameState.h
 	<SFML/Graphics.hpp>
+	<random>
 	"Shape.h"
+	"globals.h"
 
-1506969642 source:/home/michael/Desktop/SFMLProjects/Tetris/src/RunningGameState.cpp
+1507125411 source:/home/michael/Desktop/SFMLProjects/Tetris/src/RunningGameState.cpp
 	"RunningGameState.h"
 
-1506970246 /home/michael/Desktop/SFMLProjects/Tetris/include/RunningGameState.h
+1507121183 /home/michael/Desktop/SFMLProjects/Tetris/include/RunningGameState.h
 	"GameState.h"
 
-1506951541 source:/home/michael/Desktop/SFMLProjects/Tetris/main.cpp
+1507122749 source:/home/michael/Desktop/SFMLProjects/Tetris/main.cpp
 	<SFML/Graphics.hpp>
 	<RunningGameState.h>
+	"globals.h"
 
-1506968746 /home/michael/Desktop/SFMLProjects/Tetris/include/Shape.h
+1507125370 /home/michael/Desktop/SFMLProjects/Tetris/include/Shape.h
 	<SFML/Graphics.hpp>
+	"globals.h"
 
-1506970120 source:/home/michael/Desktop/SFMLProjects/Tetris/src/Shape.cpp
+1507123222 source:/home/michael/Desktop/SFMLProjects/Tetris/src/Shape.cpp
 	<cmath>
 	"Shape.h"
 	"GameState.h"
+
+1507123154 /home/michael/Desktop/SFMLProjects/Tetris/include/globals.h
+	<SFML/Graphics.hpp>
 

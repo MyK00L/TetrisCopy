@@ -2,14 +2,15 @@
 #define SHAPE_H
 
 #include <SFML/Graphics.hpp>
+#include "globals.h"
 
 class Shape
 {
     public:
-        enum Shapes{I,T,S,Q};
+        enum Shapes{O,S,Z,T,L,J,I,nShapes};
         Shape(Shapes shape);
         virtual ~Shape();
-        void rot();
+        void rot(sf::Color ** grid);
         void draw(sf::RenderWindow& window);
         void moveR(sf::Color ** grid);
         void moveL(sf::Color ** grid);

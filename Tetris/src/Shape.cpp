@@ -6,34 +6,49 @@ float Shape::vel=4;
 
 Shape::Shape(Shapes shape)
 {
-    pos=sf::Vector2f(32,100);
-    if(shape == I){
-        blocks[0]=sf::Vector2f(0,-1);
-        blocks[1]=sf::Vector2f(0,0);
-        blocks[2]=sf::Vector2f(0,1);
-        blocks[3]=sf::Vector2f(0,2);
-        col = sf::Color(255,0,0);
-    }
-    else if(shape == T){
-        blocks[0]=sf::Vector2f(-1,0);
-        blocks[1]=sf::Vector2f(0,0);
+    pos=sf::Vector2f((W/2)*blockSide,blockSide);
+    if(shape == O){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(0,1);
         blocks[2]=sf::Vector2f(1,0);
-        blocks[3]=sf::Vector2f(0,1);
-        col = sf::Color(255,128,0);
-    }
-    else if(shape == S){
-        blocks[0]=sf::Vector2f(0,1);
-        blocks[1]=sf::Vector2f(1,1);
-        blocks[2]=sf::Vector2f(0,0);
-        blocks[3]=sf::Vector2f(-1,0);
-        col = sf::Color(0,0,200);
-    }
-    else if(shape == Q){
-        blocks[0]=sf::Vector2f(1,0);
-        blocks[1]=sf::Vector2f(0,0);
-        blocks[2]=sf::Vector2f(0,1);
         blocks[3]=sf::Vector2f(1,1);
-        col = sf::Color(255,255,255);
+        col = sf::Color(255,255,0);
+    } else if(shape == S){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(0,1);
+        blocks[2]=sf::Vector2f(-1,1);
+        blocks[3]=sf::Vector2f(1,0);
+        col = sf::Color(0,255,0);
+    } else if(shape == Z){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(0,1);
+        blocks[2]=sf::Vector2f(1,1);
+        blocks[3]=sf::Vector2f(-1,0);
+        col = sf::Color(255,0,0);
+    } else if(shape == T){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(0,-1);
+        blocks[2]=sf::Vector2f(-1,0);
+        blocks[3]=sf::Vector2f(1,0);
+        col = sf::Color(127,0,255);
+    } else if(shape == L){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(-1,0);
+        blocks[2]=sf::Vector2f(1,0);
+        blocks[3]=sf::Vector2f(1,-1);
+        col = sf::Color(255,127,0);
+    } else if(shape == J){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(1,0);
+        blocks[2]=sf::Vector2f(-1,0);
+        blocks[3]=sf::Vector2f(-1,-1);
+        col = sf::Color(0,0,255);
+    } else if(shape == I){
+        blocks[0]=sf::Vector2f(0,0);
+        blocks[1]=sf::Vector2f(-1,0);
+        blocks[2]=sf::Vector2f(1,0);
+        blocks[3]=sf::Vector2f(2,0);
+        col = sf::Color(0,255,255);
     }
 }
 
@@ -42,7 +57,14 @@ Shape::~Shape()
 
 }
 
-void Shape::rot(){
+void Shape::rot(sf::Color ** grid){
+    for(int i=0;i<4;i++){
+        int px = (int)(pos.x/blockSide - blocks[i].y);
+        int py = (int)(pos.y/blockSide + blocks[i].x);
+        int pyb = (int)ceil(pos.y/blockSide + blocks[i].x);
+        if(px>=W||px<0||pyb>=H||py<0)return;
+        if(grid[py][px]!=EMPTY || grid[pyb][px]!=EMPTY)return;
+    }
     for(int i=0;i<4;i++){
         blocks[i]=sf::Vector2f(-blocks[i].y,blocks[i].x);
     }
@@ -50,7 +72,7 @@ void Shape::rot(){
 
 void Shape::draw(sf::RenderWindow& window){
     for(int i=0;i<4;i++){
-        GameState::blockSprite.setPosition(pos+blocks[i]*GameState::blockSide);
+        GameState::blockSprite.setPosition(pos+blocks[i]*(float)blockSide);
         GameState::blockSprite.setColor(col);
         window.draw(GameState::blockSprite);
     }
@@ -59,41 +81,49 @@ void Shape::draw(sf::RenderWindow& window){
 void Shape::moveR(sf::Color ** grid){
     bool b=1;
     for(int i=0; i<4; i++){
-        int py=(int)ceil(pos.y/GameState::blockSide + blocks[i].y);
-        int px=(int)(pos.x/GameState::blockSide + blocks[i].x);
-        if(px==31){b=0;break;}
-        if(grid[py][px+1]!=GameState::EMPTY){b=0;break;}
+        int py=(int)(pos.y/blockSide + blocks[i].y);
+        int px=(int)(pos.x/blockSide + blocks[i].x);
+        if(px==W-1){b=0;break;}
+        if(grid[py][px+1]!=EMPTY){b=0;break;}
+        int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
+        if(pyb<H&&grid[pyb][px+1]!=EMPTY){b=0;break;}
     }
     if(b)
-        pos.x+=GameState::blockSide;
+        pos.x+=blockSide;
 }
 
 void Shape::moveL(sf::Color ** grid){
     bool b=1;
     for(int i=0; i<4; i++){
-        int py=(int)ceil(pos.y/GameState::blockSide + blocks[i].y);
-        int px=(int)(pos.x/GameState::blockSide + blocks[i].x);
+        int py=(int)(pos.y/blockSide + blocks[i].y);
+        int px=(int)(pos.x/blockSide + blocks[i].x);
         if(px==0){b=0;break;}
-        if(grid[py][px-1]!=GameState::EMPTY){b=0;break;}
+        if(grid[py][px-1]!=EMPTY){b=0;break;}
+        int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
+        if(pyb<H&&grid[pyb][px-1]!=EMPTY){b=0;break;}
     }
     if(b)
-        pos.x-=GameState::blockSide;
+        pos.x-=blockSide;
 }
 
 bool Shape::update(sf::Color ** grid){
-    pos.y+=vel;
+    int py = (int)(pos.y/blockSide), py1 = (int)((pos.y+vel)/blockSide);
+    if( py==py1 ){
+        pos.y+=vel;
+        return 0;
+    }
     for(int i=0;i<4;i++){
-        int py=(int)ceil(pos.y/GameState::blockSide + blocks[i].y);
-        int px=(int)(pos.x/GameState::blockSide + blocks[i].x);
-        int py1 = (int)ceil((pos.y+vel)/GameState::blockSide + blocks[i].y);
-        if(py1!=py && (py>=(int)(512/GameState::blockSide)-1 || grid[py+1][px] != GameState::EMPTY)){
+        int pyb = py1 + blocks[i].y +1;
+        int px=(int)(pos.x/blockSide + blocks[i].x);
+        if(pyb >= H || grid[pyb][px]!=EMPTY){
             for(i=0;i<4;i++){
-                py=(int)ceil(pos.y/GameState::blockSide + blocks[i].y);
-                px=(int)(pos.x/GameState::blockSide + blocks[i].x);
+                int py=(int)ceil(pos.y/blockSide + blocks[i].y);
+                int px=(int)(pos.x/blockSide + blocks[i].x);
                 grid[py][px]=col;
             }
             return 1;
         }
     }
+    pos.y+=vel;
     return 0;
 }

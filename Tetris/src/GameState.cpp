@@ -2,8 +2,8 @@
 
 sf::Texture GameState::blockTexture;
 sf::Sprite GameState::blockSprite;
-sf::Color GameState::EMPTY = sf::Color(0,0,0);
 sf::Color ** GameState::grid;
+std::mt19937 GameState::rng(/*std::random_device{}()*/666);
 
 GameState::GameState(sf::RenderWindow& window)
 :
@@ -11,15 +11,14 @@ GameState::GameState(sf::RenderWindow& window)
 {
     blockTexture.loadFromFile("block.png");
     blockSprite.setTexture(blockTexture);
-    blockSprite.setScale(sf::Vector2f(blockSide/32, blockSide/32));
-    grid = new sf::Color * [32];
-    for(int y=0; y<32; y++){
-        grid[y]=new sf::Color[32];
-        for(int x=0; x<32; x++){
+    blockSprite.setScale(sf::Vector2f(blockSide/32.0f, blockSide/32.0f));
+    grid = new sf::Color * [H];
+    for(int y=0; y<H; y++){
+        grid[y]=new sf::Color[W];
+        for(int x=0; x<W; x++){
             grid[y][x] = EMPTY;
         }
     }
-    grid[31][31]=sf::Color(255,0,0);
 }
 
 GameState::GameState(GameState& o)
@@ -31,12 +30,15 @@ GameState::GameState(GameState& o)
 
 GameState::~GameState()
 {
-
+    for(int y=0; y<H; y++){
+        delete[] grid[y];
+    }
+    delete [] grid;
 }
 
 void GameState::draw(){
-    for(int y=0; y<32; y++){
-        for(int x=0; x<32; x++){
+    for(int y=0; y<H; y++){
+        for(int x=0; x<W; x++){
             if(grid[y][x]!=EMPTY){
                 blockSprite.setPosition(sf::Vector2f(x*blockSide,y*blockSide));
                 blockSprite.setColor(grid[y][x]);

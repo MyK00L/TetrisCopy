@@ -17,6 +17,8 @@ class RunningGameState : public GameState
         Shape actShape;
     private:
         bool spacePressedLastFrame;
+        sf::Clock moveClock;
+        static constexpr int moveDelayMillis = 50;
 };
 
 #endif // RUNNINGGAMESTATE_H

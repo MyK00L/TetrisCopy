@@ -2,7 +2,9 @@
 #define GAMESTATE_H
 
 #include <SFML/Graphics.hpp>
+#include <random>
 #include "Shape.h"
+#include "globals.h"
 
 class GameState
 {
@@ -18,9 +20,8 @@ class GameState
         sf::RenderWindow& window;
         static sf::Texture blockTexture;
         static sf::Sprite blockSprite;
-        static constexpr float blockSide = 16;
         static sf::Color ** grid;
-        static sf::Color EMPTY;
+        static std::mt19937 rng;
 
     private:
 };

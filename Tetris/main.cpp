@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 
 #include <RunningGameState.h>
+#include "globals.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(512, 512), "Tetris");
+    sf::RenderWindow window(sf::VideoMode(blockSide*W, blockSide*H), "Tetris");
 
     window.setFramerateLimit(30);
 
@@ -25,6 +26,6 @@ int main()
         game->draw();
         window.display();
     }
-
+    delete game;
     return 0;
 }

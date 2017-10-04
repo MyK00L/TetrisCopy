@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-#include <RunningGameState.h>
+#include "RunningGameState.h"
 #include "globals.h"
 
 int main()
@@ -11,6 +12,11 @@ int main()
 
     GameState* game = new RunningGameState(window);
     sf::Color backgroundColor = sf::Color(32,32,64);
+
+    sf::Music music;
+    music.openFromFile("korobeiniki.ogg");
+    music.setLoop(1);
+    music.play();
 
     while (window.isOpen())
     {
@@ -28,5 +34,6 @@ int main()
         window.display();
     }
     delete game;
+    music.stop();
     return 0;
 }

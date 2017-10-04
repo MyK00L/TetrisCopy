@@ -2,8 +2,11 @@
 
 sf::Texture GameState::blockTexture;
 sf::Sprite GameState::blockSprite;
+sf::Font GameState::font;
+sf::Text GameState::scoreText;
 sf::Color ** GameState::grid;
-std::mt19937 GameState::rng(/*std::random_device{}()*/666);
+int GameState::score = 0;
+std::mt19937 GameState::rng(std::random_device{}());
 
 GameState::GameState(sf::RenderWindow& window)
 :
@@ -12,6 +15,12 @@ GameState::GameState(sf::RenderWindow& window)
     blockTexture.loadFromFile("block.png");
     blockSprite.setTexture(blockTexture);
     blockSprite.setScale(sf::Vector2f(blockSide/blockTexture.getSize().x, blockSide/blockTexture.getSize().y));
+    font.loadFromFile("DejaVuSansMono.ttf");
+    scoreText.setFont(font);
+    scoreText.setColor(sf::Color(255,255,255));
+    scoreText.setPosition(0,0);
+    scoreText.setCharacterSize(16);
+    scoreText.setString("Score: 0");
     grid = new sf::Color * [H];
     for(int y=0; y<H; y++){
         grid[y]=new sf::Color[W];

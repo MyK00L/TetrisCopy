@@ -1,16 +1,16 @@
 #include "RunningGameState.h"
-
+#include <string>
 
 RunningGameState::RunningGameState(sf::RenderWindow& window)
 :
-    GameState(window),actShape(Shape::T)
+    GameState(window),actShape((Shape::Shapes)(rng()%((int)Shape::nShapes)))
 {
     moveClock.restart();
 }
 
 RunningGameState::RunningGameState(GameState& o)
 :
-    GameState(o),actShape(Shape::T)
+    GameState(o),actShape((Shape::Shapes)(rng()%((int)Shape::nShapes)))
 {
     moveClock.restart();
 }
@@ -23,6 +23,7 @@ RunningGameState::~RunningGameState()
 void RunningGameState::draw(){
     GameState::draw();
     actShape.draw(window);
+    window.draw(scoreText);
 }
 
 void RunningGameState::update(){
@@ -44,7 +45,7 @@ void RunningGameState::update(){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         actShape.vel = blockSide;
     } else {
-        actShape.vel = blockSide/8.0f;
+        actShape.vel = blockSide/4.0f;
     }
     if(actShape.update(grid)){
         actShape = Shape((Shape::Shapes)(rng()%((int)Shape::nShapes)));
@@ -59,5 +60,10 @@ void RunningGameState::update(){
             }
             if(num==W)movAm++;
         }
+        if(movAm==1)score+=40;
+        else if(movAm==2)score+=100;
+        else if(movAm==3)score+=300;
+        else if(movAm==4)score+=1200;
+        scoreText.setString("Score: " + std::to_string(score));
     }
 }

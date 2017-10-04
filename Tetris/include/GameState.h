@@ -20,7 +20,10 @@ class GameState
         sf::RenderWindow& window;
         static sf::Texture blockTexture;
         static sf::Sprite blockSprite;
+        static sf::Font font;
+        static sf::Text scoreText;
         static sf::Color ** grid;
+        static int score;
         static std::mt19937 rng;
 
     private:

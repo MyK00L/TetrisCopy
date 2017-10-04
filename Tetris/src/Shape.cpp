@@ -2,7 +2,7 @@
 #include "Shape.h"
 #include "GameState.h"
 
-float Shape::vel=blockSide/8.0f;
+float Shape::vel=blockSide/4.0f;
 
 Shape::Shape(Shapes shape)
 {
@@ -79,31 +79,27 @@ void Shape::draw(sf::RenderWindow& window){
 }
 
 void Shape::moveR(sf::Color ** grid){
-    bool b=1;
     for(int i=0; i<4; i++){
         int py=(int)(pos.y/blockSide + blocks[i].y);
         int px=(int)(pos.x/blockSide + blocks[i].x);
-        if(px==W-1){b=0;break;}
-        if(grid[py][px+1]!=EMPTY){b=0;break;}
+        if(px==W-1){return;}
+        if(grid[py][px+1]!=EMPTY){return;}
         int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
-        if(pyb<H&&grid[pyb][px+1]!=EMPTY){b=0;break;}
+        if(pyb<H&&grid[pyb][px+1]!=EMPTY){return;}
     }
-    if(b)
-        pos.x+=blockSide;
+    pos.x+=blockSide;
 }
 
 void Shape::moveL(sf::Color ** grid){
-    bool b=1;
     for(int i=0; i<4; i++){
         int py=(int)(pos.y/blockSide + blocks[i].y);
         int px=(int)(pos.x/blockSide + blocks[i].x);
-        if(px==0){b=0;break;}
-        if(grid[py][px-1]!=EMPTY){b=0;break;}
+        if(px==0){return;}
+        if(grid[py][px-1]!=EMPTY){return;}
         int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
-        if(pyb<H&&grid[pyb][px-1]!=EMPTY){b=0;break;}
+        if(pyb<H&&grid[pyb][px-1]!=EMPTY){return;}
     }
-    if(b)
-        pos.x-=blockSide;
+    pos.x-=blockSide;
 }
 
 bool Shape::update(sf::Color ** grid){

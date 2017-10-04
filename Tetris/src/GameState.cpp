@@ -11,7 +11,7 @@ GameState::GameState(sf::RenderWindow& window)
 {
     blockTexture.loadFromFile("block.png");
     blockSprite.setTexture(blockTexture);
-    blockSprite.setScale(sf::Vector2f(blockSide/32.0f, blockSide/32.0f));
+    blockSprite.setScale(sf::Vector2f(blockSide/blockTexture.getSize().x, blockSide/blockTexture.getSize().y));
     grid = new sf::Color * [H];
     for(int y=0; y<H; y++){
         grid[y]=new sf::Color[W];

@@ -16,7 +16,7 @@ class Shape
         void moveL(sf::Color ** grid);
         bool update(sf::Color ** grid );
 
-
+        static float vel;
 
     protected:
 
@@ -24,7 +24,6 @@ class Shape
         sf::Vector2f blocks[4];
         sf::Vector2f pos;
         sf::Color col;
-        static float vel;
 };
 
 #endif // SHAPE_H

@@ -2,7 +2,7 @@
 #include "Shape.h"
 #include "GameState.h"
 
-float Shape::vel=4;
+float Shape::vel=blockSide/8.0f;
 
 Shape::Shape(Shapes shape)
 {
@@ -117,7 +117,7 @@ bool Shape::update(sf::Color ** grid){
         int px=(int)(pos.x/blockSide + blocks[i].x);
         if(pyb >= H || grid[pyb][px]!=EMPTY){
             for(i=0;i<4;i++){
-                int py=(int)ceil(pos.y/blockSide + blocks[i].y);
+                int py=py1 + blocks[i].y;
                 int px=(int)(pos.x/blockSide + blocks[i].x);
                 grid[py][px]=col;
             }

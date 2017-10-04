@@ -26,20 +26,6 @@ void RunningGameState::draw(){
 }
 
 void RunningGameState::update(){
-    if(actShape.update(grid)){ //It's important to update before anything else
-        actShape = Shape((Shape::Shapes)(rng()%((int)Shape::nShapes)));
-        int movAm=0;
-        for(int y=H-1; y; --y){
-            int num=0;
-            for(int x=0; x<W; ++x){
-                if(grid[y][x]!=EMPTY)num++;
-                if(movAm){
-                    grid[y+movAm][x]=grid[y][x];
-                }
-            }
-            if(num==W)movAm++;
-        }
-    }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
         if(!spacePressedLastFrame)
             actShape.rot(grid);
@@ -55,5 +41,23 @@ void RunningGameState::update(){
         actShape.moveR(grid);
         moveClock.restart();
     }
-
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+        actShape.vel = blockSide;
+    } else {
+        actShape.vel = blockSide/8.0f;
+    }
+    if(actShape.update(grid)){
+        actShape = Shape((Shape::Shapes)(rng()%((int)Shape::nShapes)));
+        int movAm=0;
+        for(int y=H-1; y; --y){
+            int num=0;
+            for(int x=0; x<W; ++x){
+                if(grid[y][x]!=EMPTY)num++;
+                if(movAm){
+                    grid[y+movAm][x]=grid[y][x];
+                }
+            }
+            if(num==W)movAm++;
+        }
+    }
 }

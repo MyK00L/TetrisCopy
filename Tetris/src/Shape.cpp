@@ -61,7 +61,7 @@ void Shape::rot(sf::Color ** grid){
     for(int i=0;i<4;i++){
         int px = (int)(pos.x/blockSide - blocks[i].y);
         int py = (int)(pos.y/blockSide + blocks[i].x);
-        int pyb = (int)ceil(pos.y/blockSide + blocks[i].x);
+        int pyb = (int)ceil(pos.y/blockSide + (float)blocks[i].x);
         if(px>=W||px<0||pyb>=H||py<0)return;
         if(grid[py][px]!=EMPTY || grid[pyb][px]!=EMPTY)return;
     }
@@ -84,7 +84,7 @@ void Shape::moveR(sf::Color ** grid){
         int px=(int)(pos.x/blockSide + blocks[i].x);
         if(px==W-1){return;}
         if(grid[py][px+1]!=EMPTY){return;}
-        int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
+        int pyb=(int)ceil(pos.y/blockSide + (float)blocks[i].y);
         if(pyb<H&&grid[pyb][px+1]!=EMPTY){return;}
     }
     pos.x+=blockSide;
@@ -96,7 +96,7 @@ void Shape::moveL(sf::Color ** grid){
         int px=(int)(pos.x/blockSide + blocks[i].x);
         if(px==0){return;}
         if(grid[py][px-1]!=EMPTY){return;}
-        int pyb=(int)ceil(pos.y/blockSide + blocks[i].y);
+        int pyb=(int)ceil(pos.y/blockSide + (float)blocks[i].y);
         if(pyb<H&&grid[pyb][px-1]!=EMPTY){return;}
     }
     pos.x-=blockSide;
@@ -104,7 +104,7 @@ void Shape::moveL(sf::Color ** grid){
 
 bool Shape::update(sf::Color ** grid){
     int py = (int)(pos.y/blockSide), py1 = (int)((pos.y+vel)/blockSide);
-    if( py==py1 ){
+    if( py != (int)ceil(pos.y/blockSide) && py==py1 ){
         pos.y+=vel;
         return 0;
     }
@@ -113,7 +113,7 @@ bool Shape::update(sf::Color ** grid){
         int px=(int)(pos.x/blockSide + blocks[i].x);
         if(pyb >= H || grid[pyb][px]!=EMPTY){
             for(i=0;i<4;i++){
-                int py=py1 + blocks[i].y;
+                int py = py1 + blocks[i].y;
                 int px=(int)(pos.x/blockSide + blocks[i].x);
                 grid[py][px]=col;
             }

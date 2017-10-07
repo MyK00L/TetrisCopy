@@ -14,7 +14,7 @@ GameState::GameState(sf::RenderWindow& window)
 {
     blockTexture.loadFromFile("block.png");
     blockSprite.setTexture(blockTexture);
-    blockSprite.setScale(sf::Vector2f(blockSide/blockTexture.getSize().x, blockSide/blockTexture.getSize().y));
+    blockSprite.setScale(sf::Vector2f((float)blockSide/blockTexture.getSize().x, (float)blockSide/blockTexture.getSize().y));
     font.loadFromFile("DejaVuSansMono.ttf");
     scoreText.setFont(font);
     scoreText.setColor(sf::Color(255,255,255));

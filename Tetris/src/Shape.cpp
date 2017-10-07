@@ -6,48 +6,48 @@ float Shape::vel=blockSide/4.0f;
 
 Shape::Shape(Shapes shape)
 {
-    pos=sf::Vector2f((W/2)*blockSide,blockSide);
+    pos=sf::Vector2i(W/2,1);
     if(shape == O){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(0,1);
-        blocks[2]=sf::Vector2f(1,0);
-        blocks[3]=sf::Vector2f(1,1);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(0,1);
+        blocks[2]=sf::Vector2i(1,0);
+        blocks[3]=sf::Vector2i(1,1);
         col = sf::Color(255,255,0);
     } else if(shape == S){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(0,1);
-        blocks[2]=sf::Vector2f(-1,1);
-        blocks[3]=sf::Vector2f(1,0);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(0,1);
+        blocks[2]=sf::Vector2i(-1,1);
+        blocks[3]=sf::Vector2i(1,0);
         col = sf::Color(0,255,0);
     } else if(shape == Z){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(0,1);
-        blocks[2]=sf::Vector2f(1,1);
-        blocks[3]=sf::Vector2f(-1,0);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(0,1);
+        blocks[2]=sf::Vector2i(1,1);
+        blocks[3]=sf::Vector2i(-1,0);
         col = sf::Color(255,0,0);
     } else if(shape == T){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(0,-1);
-        blocks[2]=sf::Vector2f(-1,0);
-        blocks[3]=sf::Vector2f(1,0);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(0,-1);
+        blocks[2]=sf::Vector2i(-1,0);
+        blocks[3]=sf::Vector2i(1,0);
         col = sf::Color(127,0,255);
     } else if(shape == L){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(-1,0);
-        blocks[2]=sf::Vector2f(1,0);
-        blocks[3]=sf::Vector2f(1,-1);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(-1,0);
+        blocks[2]=sf::Vector2i(1,0);
+        blocks[3]=sf::Vector2i(1,-1);
         col = sf::Color(255,127,0);
     } else if(shape == J){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(1,0);
-        blocks[2]=sf::Vector2f(-1,0);
-        blocks[3]=sf::Vector2f(-1,-1);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(1,0);
+        blocks[2]=sf::Vector2i(-1,0);
+        blocks[3]=sf::Vector2i(-1,-1);
         col = sf::Color(0,0,255);
     } else if(shape == I){
-        blocks[0]=sf::Vector2f(0,0);
-        blocks[1]=sf::Vector2f(-1,0);
-        blocks[2]=sf::Vector2f(1,0);
-        blocks[3]=sf::Vector2f(2,0);
+        blocks[0]=sf::Vector2i(0,0);
+        blocks[1]=sf::Vector2i(-1,0);
+        blocks[2]=sf::Vector2i(1,0);
+        blocks[3]=sf::Vector2i(2,0);
         col = sf::Color(0,255,255);
     }
 }
@@ -57,69 +57,72 @@ Shape::~Shape()
 
 }
 
+bool Shape::canGoTo(sf::Vector2i newPos, sf::Color ** grid){
+    for(int i=0;i<4;i++){
+        if(newPos.x+blocks[i].x>=W||newPos.x+blocks[i].x<0)return 0;
+        if(py<(float)blockSide*3/4 && (newPos.y+blocks[i].y<0||newPos.y+blocks[i].y>=H||grid[newPos.y+blocks[i].y][newPos.x+blocks[i].x]!=EMPTY))return 0;
+        if(newPos.y+blocks[i].y+1<0||newPos.y+blocks[i].y+1>=H||grid[newPos.y+blocks[i].y+1][newPos.x+blocks[i].x]!=EMPTY)return 0;
+    }
+    return 1;
+}
+
+void Shape::placeBlock(sf::Color ** grid){
+    for(int i=0;i<4;i++){
+        grid[pos.y+blocks[i].y][pos.x+blocks[i].x]=col;
+    }
+}
+
 void Shape::rot(sf::Color ** grid){
     for(int i=0;i<4;i++){
-        int px = (int)(pos.x/blockSide - blocks[i].y);
-        int py = (int)(pos.y/blockSide + blocks[i].x);
-        int pyb = (int)ceil(pos.y/blockSide + (float)blocks[i].x);
-        if(px>=W||px<0||pyb>=H||py<0)return;
-        if(grid[py][px]!=EMPTY || grid[pyb][px]!=EMPTY)return;
+        int Px = (int)(pos.x - blocks[i].y);
+        int Py = (int)(pos.y + blocks[i].x);
+
+        if(Px>=W||Px<0)return;
+        if(py<(float)blockSide*3/4 && (Py<0||Py>=H||grid[Py][Px]!=EMPTY))return;
+        if(Py+1<0||Py+1>=H||grid[Py+1][Px]!=EMPTY)return;
+
     }
     for(int i=0;i<4;i++){
-        blocks[i]=sf::Vector2f(-blocks[i].y,blocks[i].x);
+        blocks[i]=sf::Vector2i(-blocks[i].y,blocks[i].x);
     }
 }
 
 void Shape::draw(sf::RenderWindow& window){
     for(int i=0;i<4;i++){
-        GameState::blockSprite.setPosition(pos+blocks[i]*(float)blockSide);
+        GameState::blockSprite.setPosition( (pos.x+blocks[i].x)*(float)blockSide,(pos.y+blocks[i].y)*(float)blockSide+py);
         GameState::blockSprite.setColor(col);
         window.draw(GameState::blockSprite);
     }
 }
 
-void Shape::moveR(sf::Color ** grid){
-    for(int i=0; i<4; i++){
-        int py=(int)(pos.y/blockSide + blocks[i].y);
-        int px=(int)(pos.x/blockSide + blocks[i].x);
-        if(px==W-1){return;}
-        if(grid[py][px+1]!=EMPTY){return;}
-        int pyb=(int)ceil(pos.y/blockSide + (float)blocks[i].y);
-        if(pyb<H&&grid[pyb][px+1]!=EMPTY){return;}
-    }
-    pos.x+=blockSide;
+bool Shape::moveR(sf::Color ** grid){
+    if(canGoTo(sf::Vector2i(pos.x+1,pos.y),grid)){
+        pos.x++;
+        return 1;
+    } else
+        return 0;
 }
 
-void Shape::moveL(sf::Color ** grid){
-    for(int i=0; i<4; i++){
-        int py=(int)(pos.y/blockSide + blocks[i].y);
-        int px=(int)(pos.x/blockSide + blocks[i].x);
-        if(px==0){return;}
-        if(grid[py][px-1]!=EMPTY){return;}
-        int pyb=(int)ceil(pos.y/blockSide + (float)blocks[i].y);
-        if(pyb<H&&grid[pyb][px-1]!=EMPTY){return;}
-    }
-    pos.x-=blockSide;
+bool Shape::moveL(sf::Color ** grid){
+    if(canGoTo(sf::Vector2i(pos.x-1,pos.y),grid)){
+        pos.x--;
+        return 1;
+    } else
+        return 0;
 }
 
 bool Shape::update(sf::Color ** grid){
-    int py = (int)(pos.y/blockSide), py1 = (int)((pos.y+vel)/blockSide);
-    if( py != (int)ceil(pos.y/blockSide) && py==py1 ){
-        pos.y+=vel;
-        return 0;
-    }
-    for(int i=0;i<4;i++){
-        int pyb = py1 + blocks[i].y +1;
-        int px=(int)(pos.x/blockSide + blocks[i].x);
-        if(pyb >= H || grid[pyb][px]!=EMPTY){
-            for(i=0;i<4;i++){
-                int py = py1 + blocks[i].y;
-                int px=(int)(pos.x/blockSide + blocks[i].x);
-                grid[py][px]=col;
-            }
+    py+=vel;
+    if(py>=blockSide){
+        py-=blockSide;
+        pos.y++;
+        if(canGoTo(sf::Vector2i(pos),grid)){
+            return 0;
+        } else {
+            placeBlock(grid);
             return 1;
         }
     }
-    pos.y+=vel;
     return 0;
 }
+

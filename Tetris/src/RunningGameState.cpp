@@ -35,12 +35,12 @@ void RunningGameState::update(){
         spacePressedLastFrame=0;
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && moveClock.getElapsedTime().asMilliseconds()>moveDelayMillis){
-        actShape.moveL(grid);
-        moveClock.restart();
+        if(actShape.moveL(grid))
+            moveClock.restart();
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && moveClock.getElapsedTime().asMilliseconds()>moveDelayMillis){
-        actShape.moveR(grid);
-        moveClock.restart();
+        if(actShape.moveR(grid))
+            moveClock.restart();
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         actShape.vel = blockSide;
@@ -48,7 +48,6 @@ void RunningGameState::update(){
         actShape.vel = blockSide/4.0f;
     }
     if(actShape.update(grid)){
-        actShape = Shape((Shape::Shapes)(rng()%((int)Shape::nShapes)));
         int movAm=0;
         for(int y=H-1; y; --y){
             int num=0;
@@ -64,6 +63,8 @@ void RunningGameState::update(){
         else if(movAm==2)score+=100;
         else if(movAm==3)score+=300;
         else if(movAm==4)score+=1200;
+        moveClock.restart();
+        actShape = Shape((Shape::Shapes)(rng()%((int)Shape::nShapes)));
         scoreText.setString("Score: " + std::to_string(score));
     }
 }

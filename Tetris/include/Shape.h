@@ -12,17 +12,22 @@ class Shape
         virtual ~Shape();
         void rot(sf::Color ** grid);
         void draw(sf::RenderWindow& window);
-        void moveR(sf::Color ** grid);
-        void moveL(sf::Color ** grid);
-        bool update(sf::Color ** grid );
+        bool moveR(sf::Color ** grid);
+        bool moveL(sf::Color ** grid);
+        bool update(sf::Color ** grid);
 
         static float vel;
 
     protected:
 
     private:
-        sf::Vector2f blocks[4];
-        sf::Vector2f pos;
+
+        bool canGoTo(sf::Vector2i newPos, sf::Color ** grid);
+        void placeBlock(sf::Color ** grid);
+
+        sf::Vector2i blocks[4];
+        sf::Vector2i pos;
+        float py;
         sf::Color col;
 };
 

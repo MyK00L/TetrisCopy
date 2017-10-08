@@ -42,11 +42,13 @@
 			<Add directory="/usr/lib" />
 		</Linker>
 		<Unit filename="include/GameState.h" />
+		<Unit filename="include/PausedGameState.h" />
 		<Unit filename="include/RunningGameState.h" />
 		<Unit filename="include/Shape.h" />
 		<Unit filename="include/globals.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameState.cpp" />
+		<Unit filename="src/PausedGameState.cpp" />
 		<Unit filename="src/RunningGameState.cpp" />
 		<Unit filename="src/Shape.cpp" />
 		<Extensions>

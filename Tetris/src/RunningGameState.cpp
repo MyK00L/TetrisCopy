@@ -1,16 +1,18 @@
 #include "RunningGameState.h"
+#include "PausedGameState.h"
 #include <string>
 
-RunningGameState::RunningGameState(sf::RenderWindow& window)
+RunningGameState::RunningGameState(sf::RenderWindow& window, GameState*& game)
 :
-    GameState(window),actShape((Shape::Shapes)(rng()%((int)Shape::nShapes)))
+    GameState(window, game)
 {
+    actShape = ((Shape::Shapes)(rng()%((int)Shape::nShapes)));
     moveClock.restart();
 }
 
 RunningGameState::RunningGameState(GameState& o)
 :
-    GameState(o),actShape((Shape::Shapes)(rng()%((int)Shape::nShapes)))
+    GameState(o)
 {
     moveClock.restart();
 }
@@ -22,11 +24,13 @@ RunningGameState::~RunningGameState()
 
 void RunningGameState::draw(){
     GameState::draw();
-    actShape.draw(window);
-    window.draw(scoreText);
 }
 
 void RunningGameState::update(){
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)){
+        game = new PausedGameState(*this);
+        delete this;
+    }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
         if(!spacePressedLastFrame)
             actShape.rot(grid);
